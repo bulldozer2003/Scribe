@@ -443,10 +443,12 @@ td img {
 
 .slider li {
     width: 125px;
+    margin-right: 10px;
 }
 
 .slider {
     width: 200px;
+    text-align: center;
 
 }
 
@@ -454,7 +456,8 @@ td img {
     width: 100px;
     height: 100px;
     padding: 0px;
-    margin: 0px;
+    margin: 0px auto -1em auto;
+    display: block;
 }
 
 #header { height: 100px; background-color: #FFF; margin: 0; padding: 0; background-image: url(../images/background.gif); }

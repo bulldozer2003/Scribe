@@ -1,9 +1,10 @@
 <?php
 $titleArray = array(__('Scripto'), __('Transcribe Page'));
+queue_css_file('scripto-transcribe');
 $head = array('title' => html_escape(implode(' | ', $titleArray)));
 echo head($head);
 if (get_option('scripto_image_viewer') == 'openlayers') {
-    echo js_tag('OpenLayers');
+    echo js_tag('ol');
     // jQuery is enabled by default in Omeka and in most themes.
     // echo js_tag('jquery', 'javascripts/vendor');
 }
@@ -88,11 +89,11 @@ jQuery(document).ready(function() {
         event.preventDefault();
         var clicks = jQuery(this).data('clicks');
         if (!clicks) {
-            jQuery(this).text('<?php echo __('hide edit'); ?>');
-            jQuery('#scripto-transcription-edit').slideDown('fast');
-        } else {
             jQuery(this).text('<?php echo __('edit'); ?>');
             jQuery('#scripto-transcription-edit').slideUp('fast');
+        } else {
+            jQuery(this).text('<?php echo __('hide edit'); ?>');
+            jQuery('#scripto-transcription-edit').slideDown('fast');
         }
         jQuery(this).data("clicks", !clicks);
     });
@@ -322,11 +323,12 @@ jQuery(document).ready(function() {
 <h1><?php echo $head['title']; ?></h1>
 <?php endif; ?>
 <div id="primary">
-<?php echo flash(); ?>
+<?php echo flash();
+?>
 
     <ul class="breadcrumb">
-        <li><a href="<?php echo WEB_ROOT; ?>">Home</a><span class="divider">/</span></li>
-        <li><a href="<?php echo url('collections'); ?>"></a></li>
+      <li><?php echo link_to_home_page(); ?><span class="divider">/</span></li>
+      <li><?php //echo link_to_collection_for_item($collection->name, array('id' => 'item-collection-link',)); ?><span class="divider">/</span></li>
         <li><a href="<?php echo url(array('controller' => 'items', 'action' => 'show', 'id' => $this->doc->getId()), 'id'); ?>"><?php echo $this->doc->getTitle(); ?></a><span class="divider">/</span></li>
         <li><?php echo metadata($file, array('Dublin Core', 'Title')); ?></li>
     </ul>
@@ -360,7 +362,7 @@ jQuery(document).ready(function() {
         </div>
 
         <!-- document viewer -->
-        <?php echo file_markup($this->file, array('imageSize' => 'fullsize')); ?>
+        <?php echo file_markup($this->file, array('imageSize' => get_option('scripto_file_source'))); ?>
 
         <!-- pagination -->
         <p>
@@ -372,7 +374,7 @@ jQuery(document).ready(function() {
         <!-- transcription -->
         <div id="scripto-transcription">
         <?php if ($this->doc->canEditTranscriptionPage()): ?>
-            <div id="scripto-transcription-edit" style="display: none;">
+            <div id="scripto-transcription-edit" style="display: block;">
             <?php if ($this->doc->isProtectedTranscriptionPage()): ?>
                 <div class="alert alert-error">
                     <strong>This transcription is complete!</strong>
@@ -384,7 +386,7 @@ jQuery(document).ready(function() {
                 <div class="alert alert-info">
                     <strong>This item is editable!</strong>
                 </div><!--alert alert-info-->
-                <div><?php echo $this->formTextarea('scripto-transcription-page-wikitext', $this->doc->getTranscriptionPageWikitext(), array('cols' => '76', 'rows' => '16')); ?></div>
+                <div><?php echo $this->formTextarea('scripto-transcription-page-wikitext', $this->doc->getTranscriptionPageWikitext(), array('style' => 'width: 99%; height: 200px')); ?></div>
                 <?php endif; ?>
                 <div>
                     <?php echo $this->formButton('scripto-transcription-page-edit', __('Edit transcription'), array('style' => 'display:inline; float:none;')); ?>
@@ -396,7 +398,7 @@ jQuery(document).ready(function() {
         <?php endif; ?>
 
             <h2><?php echo __('Current Page Transcription'); ?>
-            <?php if ($this->doc->canEditTranscriptionPage()): ?> [<a href="#" id="scripto-transcription-edit-show"><?php echo __('edit'); ?></a>]<?php endif; ?>
+            <?php if ($this->doc->canEditTranscriptionPage()): ?> [<a href="#" id="scripto-transcription-edit-show"><?php echo __('hide edit'); ?></a>]<?php endif; ?>
             <?php if ($this->scripto->canProtect()): ?> [<a href="<?php echo html_escape($this->doc->getTranscriptionPageMediawikiUrl()); ?>"><?php echo __('wiki'); ?></a>]<?php endif; ?>
             [<a href="<?php echo html_escape(url(array('item-id' => $this->doc->getId(), 'file-id' => $this->doc->getPageId(), 'namespace-index' => 0), 'scripto_history')); ?>"><?php echo __('history'); ?></a>]</h2>
             <div>

@@ -21,12 +21,14 @@
     <!-- Stylesheets -->
     <!-- Le styles -->
     <?php
-    queue_css_url('http://fonts.googleapis.com/css?family=Oxygen');
-    queue_css_url('http://fonts.googleapis.com/css?family=Inconsolata');
+    queue_css_url('https://fonts.googleapis.com/css?family=Oxygen');
+    queue_css_url('https://fonts.googleapis.com/css?family=Inconsolata');
     queue_css_file(array(
         'bootstrap',
         'font-awesome',
         'style',
+        'local',
+        'ol',
     ));
     echo head_css();
     ?>

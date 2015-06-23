@@ -15,6 +15,8 @@ $collection = get_collection_for_item();
 
     <h1><?php echo metadata('item', array('Dublin Core', 'Title')); ?></h1>
 
+    <p><?php echo metadata('item', array('Dublin Core', 'Description')); ?></p>
+
     <!-- The following returns all of the files associated with an item. -->
     <div id="itemfiles" class="element">
 
